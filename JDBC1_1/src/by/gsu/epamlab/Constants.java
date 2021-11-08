@@ -6,10 +6,10 @@ public class Constants {
     public static final String USER = "root";
     public static final String PASSWORD = "root";
 
-    public static final String SQL_QUERY_FOR_COORDINATES = "SELECT FLOOR(ABS(x2-x1)+0.5) AS len,Count(*) AS num FROM Coordinates GROUP BY len ORDER BY len";
+    public static final String SQL_QUERY_FOR_COORDINATES = "SELECT ROUND(Cast(ABS(x1-x2) AS DECIMAL)) AS len, Count(*) AS num FROM Coordinates GROUP BY 1 ORDER BY 1";
     public static final String LEN = "len";
     public static final String NUM = "num";
-    public static final String DELETE_FROM_FREQUENCIES = "DELETE FROM Frequencies\"";
+    public static final String DELETE_FROM_FREQUENCIES = "DELETE FROM Frequencies";
     public static final String INSERT_INTO_FREQUENCIES = "INSERT INTO Frequencies(len, num) VALUES(?, ?)";
     public static final String SELECT_FROM_FREQUENCIES = "SELECT * FROM Frequencies";
     public static final String DELIMITER = ";";

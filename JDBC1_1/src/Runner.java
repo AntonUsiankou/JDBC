@@ -11,7 +11,6 @@ public class Runner {
     public static void main(String[] args) {
 
         try {
-            Class.forName(CLASS_NAME);
             Connection connection = null;
             Statement statement = null;
             ResultSet resultSet = null;
@@ -56,7 +55,7 @@ public class Runner {
                     connection.close();
                 }
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(ERROR_MESSAGE + e.getMessage());
         }
     }
