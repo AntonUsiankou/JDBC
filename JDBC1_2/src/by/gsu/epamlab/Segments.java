@@ -1,5 +1,7 @@
 package by.gsu.epamlab;
 
+import static by.gsu.epamlab.Constants.DELIMITER;
+
 public class Segments {
     private int len;
     private int num;
@@ -23,6 +25,6 @@ public class Segments {
 
     @Override
     public String toString() {
-        return  len + ";" + num;
+        return  len + DELIMITER + num;
     }
 }

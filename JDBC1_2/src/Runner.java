@@ -11,30 +11,25 @@ public class Runner {
     public static void main(String[] args) {
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-             Statement statement = connection.createStatement()) {
+             Statement statement = connection.createStatement();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_FREQUENCIES);) {
+
+            statement.executeUpdate(DELETE_FREQUENCIES);
+
+            List<Segments> segmentsList = new ArrayList<>();
             try (ResultSet resultSet = statement.executeQuery(SELECT_COORDINATES)) {
-                List<Segments> segmentsList = new ArrayList<>();
                 while (resultSet.next()) {
                     segmentsList.add(new Segments(resultSet.getInt(LEN), resultSet.getInt(NUM)));
                 }
-                PreparedStatement preparedStatement = connection.prepareStatement(DELETE_FREQUENCIES);
-                preparedStatement.executeUpdate();
-                preparedStatement = connection.prepareStatement(INSERT_FREQUENCIES);
-                for (Segments segment : segmentsList) {
-                    preparedStatement.setInt(PARAMETER_INDEX_ONE, segment.getLen());
-                    preparedStatement.setInt(PARAMETER_INDEX_TWO, segment.getNum());
-                    preparedStatement.addBatch();
-                }
-                preparedStatement.executeBatch();
             }
-            try( ResultSet resultSet = statement.executeQuery(SELECT_FREQUENCIES)) {
+            for (Segments segment : segmentsList) {
+                preparedStatement.setInt(LEN_IND, segment.getLen());
+                preparedStatement.setInt(NUM_IND, segment.getNum());
+                preparedStatement.addBatch();
+            }
+            preparedStatement.executeBatch();
 
-                while (resultSet.next()) {
-                    System.out.println(resultSet.getInt(LEN) + DELIMITER + resultSet.getInt(NUM));
-                }
-            }
-                System.out.println();
-            try(ResultSet resultSet = statement.executeQuery(COMPARE_SELECT_FROM_FREQUENCIES)){
+            try(ResultSet resultSet = statement.executeQuery(SELECT_FROM_FREQUENCIES_WHERE_LEN_MORE_NUM)){
                 while (resultSet.next()) {
                     System.out.println(resultSet.getInt(LEN) + DELIMITER + resultSet.getInt(NUM));
                 }
